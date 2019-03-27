@@ -1,0 +1,32 @@
+<!DOCTYPE html>		
+<html lang="en">		
+    <head>				 
+        <meta charset="utf-8">	 
+        <title>Javascript</title>	
+         <!--länken till css filen-->
+         <link rel="stylesheet" type="text/css" href="grupparbete.css">
+         <script src="plotly-latest.min.js"></script>
+         <script type = "text/javascript" src="convert_healthcare.json"></script>
+         <script type = "text/javascript" src="convert_diagnos.json"></script>
+         
+    </head>
+    <body>
+
+        <div class="row">
+            <div id="histogram_price" class="column"></div>
+            <div id="histogram_guest" class="column"></div>
+        </div>
+        <div class="row">
+            <div id="scatter" class="column">
+                <button onclick="displayDate()">Change is gonna come</button>
+            </div>
+            <div id="pie" class="column"></div>
+        </div> 
+
+        
+
+        <script src="dist/alasql.js"></script>
+        <script src = "Database.js"></script>
+        
+    </body>
+</html>
