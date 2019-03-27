@@ -12,15 +12,28 @@
     </head>
     <body>
 
-        <div class="row">
-            <div id="histogram_price" class="column"></div>
-            <div id="histogram_guest" class="column"></div>
-        </div>
-        <div class="row">
-            <div id="scatter" class="column">
-                <button onclick="displayDate()">Change is gonna come</button>
-            </div>
-            <div id="pie" class="column"></div>
+          <div class="row">
+               <div id="histogram_price" class="column">
+               </div>
+               <div id="histogram_guest" class="column">
+               </div>
+          </div>
+          <div class="row">
+               <div id="scatter" class="column">
+                    <button onclick="displayDate()">Change is gonna come</button>
+                    <input type="text" id="name" name="name" required
+                    minlength="4" maxlength="8" size="10">
+                    <form>
+                         <select id="mySelect">
+                              <option>Fråga1</option>
+                              <option>Fråga2</option>
+                              <option>Fråga3</option>
+                              <option>Fråga4</option>
+                         </select>
+                    </form>
+               </div>
+               <div id="pie" class="column">
+               </div>
         </div> 
 
         
