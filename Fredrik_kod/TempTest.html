@@ -1,0 +1,300 @@
+
+
+
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>JSON Sandbox</title>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>  
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="DiagnosTyp.js"></script>
+        <script src="convertcsv.js"></script>
+    </head>
+    <body>
+
+    <h2>Create Object from JSON String</h2>
+
+
+<!--
+    <p id="demo"></p>
+    <script>
+    var txt = '{"name":"John", "age":30, "city":"New York"}'
+    var obj = JSON.parse(txt);
+    document.getElementById("demo").innerHTML = obj.name + ", " + obj.age + ", "+ obj.length;
+    </script>
+-->
+
+
+
+
+
+<!--egen kod nedanför, den hämtar datat från sjukhusdata.js
+I exemplet har jag valt Nyckeln,"results",index[0] & nyckeln period.-->
+
+ 
+ 
+
+    <div id='myDiv1'><!-- Plotly chart will be drawn inside this DIV --></div>
+    <div id='myDiv2'><!-- Plotly chart will be drawn inside this DIV --></div>
+    
+
+<p id="Temp"></p>
+
+
+
+
+<script>
+
+// denna genererar knappar till samtliga frågor ur vårt dataset till HTML-kod.
+//gör om denna till en funktion som går att återanvända!!!!!!!!!!!!!!!!!!!!!
+    var output = '';
+    let flags =[];
+    for(i=0; i<Dataset.length; i++){
+        if(flags[Dataset[i].name_long]) continue;   //flags används för att rensa ut dubbletter
+           flags[Dataset[i].name_long] = true;
+       output += '<button type ="button">'+ Dataset[i].name_long +'</button><br><br>';
+    }
+     document.getElementById("Temp").innerHTML = output; //här talar vi om att vi ska exekverar texten output här som HTML-kod.
+
+
+
+////////////////TESTER MED ATT VÄLJA DATATYP FÖR INDATAT. (för att den ska fungera så måste vi byta ut . mot ,)
+// Denna funktion returnerar en lista  med inmatning Fråga, året vi vill visa, & vilken kolumn vi vill se.
+function testmetod(Dataset, Fråga, år, attribut, dataTyp){
+    var lista = [];
+    for(i=0; i<Dataset.length; i++){
+      if(Dataset[i].name_long == Fråga && Dataset[i].period == år)
+            lista.push(dataTyp(Dataset[i][attribut]));
+        }
+    return lista;
+    }
+
+var X1 = testmetod(Dataset,Dataset[0].name_long,"2017","geo_cat",String);
+var Y1 = testmetod(Dataset,Dataset[0].name_long,"2017","value",Number)
+
+
+
+
+//Returnerar en lista på värden specifikt för ValuesDiagnos
+function GetValuesDiagnos(år,key){
+var lista = [];
+for(i=0; i < dataSetDiagnosSV.length; i++){
+    if (dataSetDiagnosSV[i].period == år)
+      lista.push(dataSetDiagnosSV[i][key])
+    }
+    return lista
+}
+
+
+
+var X2 = GetValuesDiagnos("2013","DiagnosTyp");
+var Y2 = GetValuesDiagnos("2013","Totalt");
+
+var X3 = GetValuesDiagnos("2014","DiagnosTyp");
+var Y3 = GetValuesDiagnos("2014","Totalt");
+
+var X4 = GetValuesDiagnos("2015","DiagnosTyp");
+var Y4 = GetValuesDiagnos("2015","Totalt");
+
+var X5 = GetValuesDiagnos("2016","DiagnosTyp");
+var Y5 = GetValuesDiagnos("2016","Totalt");
+
+var X6 = GetValuesDiagnos("2017","DiagnosTyp");
+var Y6 = GetValuesDiagnos("2017","Totalt");
+/*
+var X2 = testmetod(Dataset[1].name_long,"2017","geo_cat",String);
+var Y2 = testmetod(Dataset[1].name_long,"2017","value",Number);
+
+var X3 = testmetod(Dataset[4].name_long,"2017","geo_cat",String);
+var Y3 = testmetod(Dataset[4].name_long,"2017","value",Number);
+
+
+//jobba med denna när jag fixat Testet
+//var X4 = getUniqueKeys(dataSetDiagnosSV,"period");
+//var Y4 = testmetod(dataSetDiagnosSV[4].DiagnosTyp,"2014","value",Number);
+/*
+
+
+var X5 = testmetod(dataSetDiagnosSV[4].name_long,"2015","geo_cat",String);
+var Y5 = testmetod(dataSetDiagnosSV[4].name_long,"2015","value",Number);
+
+var X6 = testmetod(dataSetDiagnosSV[4].name_long,"2016","geo_cat",String);
+var Y6 = testmetod(dataSetDiagnosSV[4].name_long,"2016","value",Number);
+
+var X7 = testmetod(dataSetDiagnosSV[4].name_long,"2017","geo_cat",String);
+var Y7 = testmetod(dataSetDiagnosSV[4].name_long,"2017","value",Number);
+
+
+
+/*
+var X4 = testmetod(Dataset[5].name_long,"2017","geo_cat");
+var Y4 = testmetod(Dataset[5].name_long,"2017","value",Number);
+*/
+
+
+
+
+
+
+// DETTA ÄR EN KOMPLETT FUNKTION SOM RETURENAR EN LISTA PÅ UNIKA NYCKELVÄRDEN. 
+//funktionen förutsätter att datasetet är en strukturerad lista med objekt i, inget Inception-tjafs får finnas i listan!
+function getUniqueKeys(dataset, key){
+    lista = []
+    flag = []
+    for(i=0; i<dataset.length; i++){
+     if(flag[dataset[i][key]]) continue;   //flags används för att rensa ut dubbletter
+        flag[dataset[i][key]] = true;
+    lista.push(dataset[i][key])
+    console.log(i)
+    }
+return lista
+}
+
+/*
+Test =
+getUniqueKeys(diagnosSet, "DiagnosTyp")
+
+Test =
+getUniqueKeys(diagnosSet, "Totalt")
+*/
+
+/*
+
+//Scatterplotts data
+var scatterPlotData = [{
+    x: X1,
+    y: Y1,
+    type: 'bar',
+}];
+
+//Scatterplotts layout
+var layoutScatterplot = {
+    xaxis: {title: {text: 'Price'}},
+    yaxis: {title: {text: 'Reviews'}}   
+                       }
+
+
+
+var scatterPlotData2 = [{
+    x: X2,
+    y: Y2,
+    type: 'bar',
+}];
+
+//Scatterplotts layout
+var layoutScatterplot2 = {
+    xaxis: {title: {text: 'Price'}},
+    yaxis: {title: {text: 'Reviews'}}   
+                       }
+
+
+var trace1 = {
+  x: ['Könisar', 'Drunkning i vattenpölar pga. alkohol', 'pulkolyckor'],
+  y: [20, 14, 23],
+  name: '2016',
+  type: 'bar'
+};
+
+var trace2 = {
+  x: ['Könisar', 'Drunkning i vattenpölar pga. alkohol', 'pulkolyckor'],
+  y: [12, 18, 29],
+  name: '2017',
+  type: 'bar'
+};
+
+var data = [trace1, trace2];
+
+var layout = {barmode: 'group'};
+
+Plotly.newPlot('myDiv2', data, layout);
+
+*/
+
+
+
+//Plotly.newPlot('myDiv1', scatterPlotData, layoutScatterplot);
+//Plotly.newPlot('myDiv2', scatterPlotData2, layoutScatterplot2);
+
+var data = [
+  {
+    x: X1,
+    y: Y1,
+    type: 'bar'
+  }
+];
+
+
+var data2 = {
+    x: X2,
+    y: Y2,
+    name:"2013",
+    type: 'bar'
+};
+
+
+var data3 =  {
+    x: X3,
+    y: Y3,
+    name:"2014",
+    type: 'bar'
+  };
+
+
+var data4 =  {
+    x: X4,
+    y: Y4,
+    name:"2015",
+    type: 'bar'
+  };
+
+
+var data5 =  {
+    x: X5,
+    y: Y5,
+    name:"2016",
+    type: 'bar'
+  };
+
+
+var data6 =  {
+    x: X6,
+    y: Y6,
+    name:"2017",
+    type: 'bar'
+  };
+
+var data22 = [data2,data3,data4,data5,data6];
+
+var layout = {barmode: 'group'};
+
+
+
+/*
+var data3 = [
+  {
+    x: X3,
+    y: Y3,
+    type: 'bar'
+  }
+];
+
+*/
+
+Plotly.newPlot('myDiv1', data);
+//Plotly.newPlot('myDiv2', data2);
+
+Plotly.newPlot('myDiv2', data22, layout);
+
+
+/*
+Plotly.newPlot('myDiv3', data3);
+*/
+</script>
+
+
+
+</body>
+</html>
