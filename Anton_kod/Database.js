@@ -42,7 +42,7 @@ alasql("use test_database");
 
 alasql("CREATE TABLE diagnos (id int, year int, kvartal int, diagnos_kod string, diagnos_text string, antal int, andel float, antal_kvinnor int, andel_kvinnor float, antal_man int, andel_man float)");
 
-alasql("CREATE TABLE healthcare (id int, name_long string, geo_cat string, type_value string, value_amount float, period datetime, sex string)");
+alasql("CREATE TABLE healthcare (id int, nr_rapp int, name_long string, geo_cat string, type_value string, value_amount float, period datetime, sex string)");
 /*
 // Inläsning till sql av data_diagnos
 for (var i = 0; i < data_diagnos.length; i++) {
@@ -76,7 +76,8 @@ for (var i = 0; i < data_diagnos.length; i++) {
 
 // Inläsning till sql från data_healthcare
 for (var i = 0; i < data_healthcare.length; i++) {
-     alasql("INSERT INTO healthcare VALUES (" + i + ",'"
+     alasql("INSERT INTO healthcare VALUES (" + i + ","
+     + data_healthcare[i].nr_rapp + ",'"
      + data_healthcare[i].name_long + "','"
      + data_healthcare[i].geo_cat + "','"
      + data_healthcare[i].type + "',"
