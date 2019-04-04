@@ -128,8 +128,12 @@ Plotly.plot(histo_guest, data_histo_guest, layout_guest);
 
 // Knapptryckning
 
-var x = document.getElementById("year");
+var x = document.getElementById("year_min");
 x.setAttribute("value", 2016);
+document.body.appendChild(x);
+
+var x = document.getElementById("year_max");
+x.setAttribute("value", 2017);
 document.body.appendChild(x);
 
 var x = document.getElementById("name");
@@ -138,13 +142,26 @@ document.body.appendChild(x);
 
 function displayDate() {
 
-     var input_year = document.getElementById("year").value;
+     var input_year_min = document.getElementById("year_min").value;
+     var input_year_max = document.getElementById("year_max").value;
      var input_name = document.getElementById("name").value;
      input_name = input_name.replace(/ä/gi,'a');
      input_name = input_name.replace(/å/gi,'a');
      input_name = input_name.replace(/ö/gi,'o');
 
-     text_var = alasql("SELECT * FROM healthcare WHERE year = " + input_year + "and geo_cat = '" + input_name + "'");
+     var input_rapp = document.getElementById("mySelect").value;
+     var input_sex = document.getElementById("mySex").value;
+
+     if (input_rapp == 0 && input_name == "") {
+          text_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and sex = '" + input_sex + "'");
+     } else if (input_rapp == 0) {
+          text_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and geo_cat = '" + input_name + "'" + " and sex = '" + input_sex  + "'");
+     } else if (input_name == "") {
+          text_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and nr_rapp = " + input_rapp + " and sex = '" + input_sex  + "'");
+     } else {
+          text_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and geo_cat = '" + input_name + "' and nr_rapp = " + input_rapp + " and sex = '" + input_sex + "'");
+     }
+     
 
      text_list = [];
      review_var = [];

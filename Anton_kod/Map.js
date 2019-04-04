@@ -106,36 +106,44 @@
  
    // Create hover state and set alternative fill color
    var hs = polygonTemplate.states.create("hover");
-   hs.properties.fill = chart.colors.getIndex(1).brighten(-0.5);
+   hs.properties.fill = chart.colors.getIndex(0).brighten(-0.8);
 
    var polygonTemplate = polygonSeries.mapPolygons.template;
    polygonTemplate.events.on("hit", function(ev) {
      // zoom to an object
      ev.target.series.chart.zoomToMapObject(ev.target);
+     ev.target.series.chart.colors.getIndex(10).brighten(0);
     
      document.getElementById("name").value = ev.target.dataItem.dataContext.name;
      displayDate();
 
      data = [];
-  
-      for(var i = 0; i < sweden.features.length; i++) {
-        data_replace = sweden.features[i].properties.name;
- 
-        data_replace = data_replace.replace(/ä/gi,'a');
-        data_replace = data_replace.replace(/å/gi,'a');
-        data_replace = data_replace.replace(/ö/gi,'o');
-   
-        data_map = alasql("SELECT value_amount from healthcare where geo_cat = '" + data_replace + "' and nr_rapp = 1 and sex = 'Totalt' and year = 2017");
-    
-        data.push({
+     
+     var input_rapp =  document.getElementById("mySelect").value;
+
+     if (input_rapp == 0) {
+          input_rapp = 1
+     }
+     
+     for(var i = 0; i < sweden.features.length; i++) {
+          data_replace = sweden.features[i].properties.name;
+
+          data_replace = data_replace.replace(/ä/gi,'a');
+          data_replace = data_replace.replace(/å/gi,'a');
+          data_replace = data_replace.replace(/ö/gi,'o');
+
+          data_map = alasql("SELECT value_amount from healthcare where geo_cat = '" + data_replace + "' and nr_rapp = " + input_rapp + " and sex = '" + document.getElementById("mySex").value + "' and year >= " + document.getElementById("year_min").value + " and year <= " + document.getElementById("year_max").value);
+
+          data.push({
           id: sweden.features[i].id,
           value: data_map[0]["value_amount"]
-        })
-      }
+          })
+     }
+      
 
      ev.target.series.data = data;
      // get object info
-     console.log(ev.target.dataItem.dataContext.value);
+     //console.log(ev.target.dataItem.dataContext.value);
      
     });
  };
