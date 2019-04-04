@@ -8,6 +8,7 @@
          <script src="plotly-latest.min.js"></script>
          <script type = "text/javascript" src="convert_healthcare.json"></script>
          <script type = "text/javascript" src="convert_diagnos.json"></script>
+         <script type = "text/javascript" src="geodata/json/swedenLow-Code.json"></script>
          <script src="https://www.amcharts.com/lib/4/core.js"></script>
          
          
@@ -19,6 +20,8 @@
          <script src="amcharts4/lang/sv_SE.js"></script>
          <script src="geodata/swedenLow.js"></script>
          <script src="amcharts4/maps.js"></script>
+
+
            
     </head>
     <body>
@@ -33,7 +36,9 @@
             <div id="chartdiv" class="column"></div>
             <div id="scatter" class="column">
                 <button onclick="displayDate()">Change is gonna come</button>
-            <input type="text" id="name" name="name" required minlength="4" maxlength="8" size="10"> 
+                <button onclick="function_draw()">Change is coming</button>
+            <input type="text" id="year" name="year" required minlength="4" maxlength="8" size="10"> 
+            <input type="text" id="name" name="name" required minlength="4" maxlength="15" size="10"> 
                 <form>
                       <select id="mySelect">
                           <option>Fråga1</option>
@@ -45,10 +50,10 @@
             </div>      
       </div> 
 
-    <script src="dist/alasql.js"></script>
-    <script src = "Database.js"></script>
+      <script src="dist/alasql.js"></script>
+      <script src = "Database.js"></script>
+      <script src = "Map.js"></script>
 
-    <script src = "Map.js"></script>
       <!-- HTML -->
       
     </body>

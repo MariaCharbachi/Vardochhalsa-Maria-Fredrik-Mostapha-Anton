@@ -42,23 +42,7 @@ alasql("use test_database");
 
 alasql("CREATE TABLE diagnos (id int, year int, kvartal int, diagnos_kod string, diagnos_text string, antal int, andel float, antal_kvinnor int, andel_kvinnor float, antal_man int, andel_man float)");
 
-alasql("CREATE TABLE healthcare (id int, nr_rapp int, name_long string, geo_cat string, type_value string, value_amount float, period int, sex string)");
-/*
-// Inläsning till sql av data_diagnos
-for (var i = 0; i < data_diagnos.length; i++) {
-  alasql("INSERT INTO diagnos VALUES (" + i + ",'"
-  + Number(data_diagnos[i].ar) + "',"
-  + Number(data_diagnos[i].kvartal) + ",'"
-  + data_diagnos[i].diagnoskapitel_kod + "','"
-  + data_diagnos[i].diagnoskapitel_text + "','"
-  + Number(data_diagnos[i].antal) + "','"
-  + Number(data_diagnos[i].andel) + "','"
-  + Number(data_diagnos[i].antal_kvinnor) + "','"
-  + Number(data_diagnos[i].andel_kvinnor) + "','"
-  + Number(data_diagnos[i].antal_man) + "','"
-  + Number(data_diagnos[i].andel_man) + "')");
-}
-*/
+alasql("CREATE TABLE healthcare (id int, nr_rapp int, name_long string, geo_cat string, type_value string, value_amount float, year int, sex string)");
 
 for (var i = 0; i < data_diagnos.length; i++) {
      alasql("INSERT INTO diagnos VALUES (" + i + ",'"
@@ -76,14 +60,16 @@ for (var i = 0; i < data_diagnos.length; i++) {
 
 // Inläsning till sql från data_healthcare
 for (var i = 0; i < data_healthcare.length; i++) {
-     alasql("INSERT INTO healthcare VALUES (" + i + ","
-     + data_healthcare[i].nr_rapp + ",'"
-     + data_healthcare[i].name_long + "','"
-     + data_healthcare[i].geo_cat + "','"
-     + data_healthcare[i].type + "',"
-     + data_healthcare[i].value + ",'"
-     + Number(data_healthcare[i].period) + "','"
-     + data_healthcare[i].sex_all + "')");
+     if ([1,2,4,5,16,42,47,48].includes(data_healthcare[i].nr_rapp)) {
+          alasql("INSERT INTO healthcare VALUES (" + i + ","
+          + data_healthcare[i].nr_rapp + ",'"
+          + data_healthcare[i].name_long + "','"
+          + data_healthcare[i].geo_cat + "','"
+          + data_healthcare[i].type + "',"
+          + data_healthcare[i].value + ",'"
+          + Number(data_healthcare[i].period) + "','"
+          + data_healthcare[i].sex_all + "')");
+     }
 }     
 
 // skriv data
@@ -119,7 +105,7 @@ text_var = alasql("SELECT * FROM healthcare");
 text_list = [];
 review_var = [];
 for (var i = 0; i < text_var.length; i++)  {
-  text_list.push(text_var[i]["period"]);
+  text_list.push(text_var[i]["year"]);
   review_var.push(text_var[i]["value_amount"]);
 }
 
@@ -142,20 +128,29 @@ Plotly.plot(histo_guest, data_histo_guest, layout_guest);
 
 // Knapptryckning
 
+var x = document.getElementById("year");
+x.setAttribute("value", 2016);
+document.body.appendChild(x);
+
 var x = document.getElementById("name");
-x.setAttribute("value", 2006);
+x.setAttribute("value", "Stockholm");
 document.body.appendChild(x);
 
 function displayDate() {
 
-     var input = document.getElementById("name").value;
+     var input_year = document.getElementById("year").value;
+     var input_name = document.getElementById("name").value;
+     input_name = input_name.replace(/ä/gi,'a');
+     input_name = input_name.replace(/å/gi,'a');
+     input_name = input_name.replace(/ö/gi,'o');
 
-     text_var = alasql("SELECT * FROM diagnos WHERE year = " + input);
+     text_var = alasql("SELECT * FROM healthcare WHERE year = " + input_year + "and geo_cat = '" + input_name + "'");
+
      text_list = [];
      review_var = [];
      for (var i = 0; i < text_var.length; i++)  {
           text_list.push(text_var[i]["year"]);
-          review_var.push(text_var[i]["antal"]);
+          review_var.push(text_var[i]["value_amount"]);
      }
 
      var data_histo_price = [{

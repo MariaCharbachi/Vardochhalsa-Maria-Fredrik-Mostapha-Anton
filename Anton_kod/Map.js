@@ -4,11 +4,6 @@
  
  window.onload = function() {
  
- /**
-  * This demo uses our own method of determining user's location
-  * It is not public web service that you can use
-  * You'll need to find your own. We recommend http://www.maxmind.com
-  */
  geo = {"country_code":"SE","country_name":"Sweden"};
    var defaultMap = "swedenLow";
    var countryMaps = {
@@ -34,14 +29,17 @@
    
    chart.titles.create().text = title;
  
-   //sql_data = alasql("SELECT value_amount from healthcare where geo_cat = '" + test_geo + "' and nr_rapp = 1 and sex = 'Totalt' and period = 2017");
-   sql_data = alasql("SELECT value_amount from healthcare where geo_cat = 'orebro' and nr_rapp = 1 and sex = 'Totalt' and period = 2017");
+   //sql_data = alasql("SELECT value_amount from healthcare where geo_cat = 'orebro' and nr_rapp = 1 and sex = 'Totalt' and period = 2017");
+   
+
 
    // Set map definition
    chart.geodataSource.url = "https://www.amcharts.com/lib/4/geodata/json/" + currentMap + ".json";
    chart.geodataSource.events.on("parseended", function(ev) {
      var data = [];
      
+     var input = document.getElementById("name").value;
+
      for(var i = 0; i < ev.target.data.features.length; i++) {
        data_replace = ev.target.data.features[i].properties.name;
 
@@ -49,7 +47,7 @@
        data_replace = data_replace.replace(/å/gi,'a');
        data_replace = data_replace.replace(/ö/gi,'o');
 
-       data_map = alasql("SELECT value_amount from healthcare where geo_cat = '" + data_replace + "' and nr_rapp = 1 and sex = 'Totalt' and period = 2017");
+       data_map = alasql("SELECT value_amount from healthcare where geo_cat = '" + data_replace + "' and nr_rapp = 1 and sex = 'Totalt' and year = 2016");
        
        data.push({
          id: ev.target.data.features[i].id,
@@ -109,5 +107,39 @@
    // Create hover state and set alternative fill color
    var hs = polygonTemplate.states.create("hover");
    hs.properties.fill = chart.colors.getIndex(1).brighten(-0.5);
+
+   var polygonTemplate = polygonSeries.mapPolygons.template;
+   polygonTemplate.events.on("hit", function(ev) {
+     // zoom to an object
+     ev.target.series.chart.zoomToMapObject(ev.target);
+    
+     document.getElementById("name").value = ev.target.dataItem.dataContext.name;
+     displayDate();
+
+     data = [];
+  
+      for(var i = 0; i < sweden.features.length; i++) {
+        data_replace = sweden.features[i].properties.name;
  
+        data_replace = data_replace.replace(/ä/gi,'a');
+        data_replace = data_replace.replace(/å/gi,'a');
+        data_replace = data_replace.replace(/ö/gi,'o');
+   
+        data_map = alasql("SELECT value_amount from healthcare where geo_cat = '" + data_replace + "' and nr_rapp = 1 and sex = 'Totalt' and year = 2017");
+    
+        data.push({
+          id: sweden.features[i].id,
+          value: data_map[0]["value_amount"]
+        })
+      }
+
+     ev.target.series.data = data;
+     // get object info
+     console.log(ev.target.dataItem.dataContext.value);
+     
+    });
  };
+
+
+
+ 
