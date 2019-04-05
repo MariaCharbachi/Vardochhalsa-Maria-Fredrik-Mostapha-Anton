@@ -1,0 +1,88 @@
+ <!DOCTYPE html>
+<html lang="sv">
+    <head>
+        <meta charset="utf-8">
+        <!--Länkar till CSS och JSON-->
+        <!--<link rel="stylesheet" href="Engodvard.css"></link rel>-->
+        <!-- <link rel="text/javascript" href="Engodvard.json"></link rel>  -->
+        <script type="text/javascript" src="Engodvard.js"></script> 
+        <link rel="stylesheet" type="text/css" href="design.css">
+
+        
+        <!--Länk till Plot.ly bibliotek-->
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+       <!-- <script src="lanskoder.json"></script>-->
+
+    </head>
+<title>
+    <h1>Vårdcentral</h1>
+</title>
+<body>
+
+
+
+
+
+       <!-- Sätter in bakgrundsbild    Denna ska också centreras över hela sidan, och endast dyka upp som en bild. CSS-->
+       <style>
+            body  {
+            background-image: url("https://www.gannett-cdn.com/-mm-/7505811d7190374f923558841681a3ad23bbdb82/c=340-0-5660-4000/local/-/media/2017/05/05/TXNMGroup/LasCruces/636295771300796029-GettyImages-531560090.jpg?width=534&height=401&fit=crop");
+            background-repeat: no-repeat;
+            
+            }
+            </style>
+
+<!--Lista för navigation-bar.-->
+<p id="naven"></p>
+<!--1. Skatt, 2. Andel 1-6, 8. Summering, 9. Sjukdomskategori för kampanj, 10. Resultat-->
+<ul class="bar">
+    <li><a class="active" href=#home>Home</a></li> <!--Här ska länkar läggas in för resp graf-->
+    <li><a href="Skatt.html">Skatt</a></li> Plot.ly grafens url, under url läggs text in.
+    <li><a href="Andel.html">Andel 1-6</a></li>
+    <li><a href="Summa.html">Summering</a></li>
+    <li><a href="Kampanj.html">Kampanjidéer</a></li>
+    <li><a href="Resultat.html">Resultat</a></li>
+  </ul>
+  
+<!--Någonstans i bodyn ska detta in. Det är rubriker till respektive graf, och jag vill sätta in dom nu för att kunna göra CSS på dom.
+Dessa ska sättas in i DIV.-->
+<h1 class="rubriker">Landstingens strukturjusterade hälso- och sjukvårdskostnader per invånare. Primärvårdsansluten hemsjukvård, tandvård och omstruktureringskostnader är exkluderade</h1>
+<div id='myDiv1'></div>
+<h1>Andel i befolkningen som anser att de har tillgång till den hälso- och sjukvård de behöver</h1>
+<div id='myDiv2'>Plotly chart will be drawn inside this DIV</div>
+<h1>Andel besvarade telefonsamtal i primärvården, (enbart enheter med datoriserade telefonsystem)</h1> -->
+<div id='myDiv3'>Plotly chart will be drawn inside this DIV</div>
+<h1>Andel patienter som får läkarbesök inom 7 dagar i primärvård</h1>
+<div id='myDiv4'>Plotly chart will be drawn inside this DIV</div>
+<h1>Andel patienter som upplevt sig delaktiga och involverade i sin vård vid besök vid primärvårdsmottagningn, andelen baseras på en sammanvägning av flera enkätfrågor</h1>
+<div id='myDiv5'>Plotly chart will be drawn inside this DIV</div> -->
+<h1>Andel i befolkningen som har stort eller mycket stort förtroende för hälso- och sjukvården i sin helhet i sitt landsting/sin region</h1>
+<div id='myDiv6'>Plotly chart will be drawn inside this DIV</div>
+<h1>Andel i befolkningen som uppfattar att vård ges på lika villkor</h1>
+<div id='myDiv7'>Plotly chart will be drawn inside this DIV</div>
+<h1>Befolkningens sjukdomstillstånd grupperat efter år och kategori</h1>
+<div id='myDiv8'>Plotly chart will be drawn inside this DIV </div>
+<h1>Sammanlagd poäng utefter våra andelsfrågor</h1> 
+<div id='myDiv9'>Plotly chart will be drawn inside this DIV</div> 
+
+<div id='myDiv10'>Plotly chart will be drawn inside this DIV </div>
+<br>
+<br>
+<br>
+
+
+
+                                        <!--Här ska vi sätta in så att texten visas till höger om baren-->
+  <div style="margin-left:25%;padding:1px 16px;height:1000px;"></div>   
+    <h2>Här presenteras grafen för ...</h2>
+    <h3>Och här ska graferna in</h3>
+    <p>Vi skriver stödord för respektive graf, vad vi ser rent visuellt. </p>
+    <p> Men jag tänker också att vi har stödord för vårt resonemang och våra tankar när vi hämtat ut datat, 
+      och vad vi har kommit fram till. Vad denna graf leder till.... som leder till resultatet i resultat-fliken.
+
+    </p>
+ 
+  </div>
+
+</body>
+    </html>
