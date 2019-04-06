@@ -1,0 +1,142 @@
+.img {
+  background-repeat: no-repeat;
+  background-position: right top;
+  margin-right: 200px;
+  background-attachment: fixed;
+} 
+
+/* Design för samtliga rubriker */
+.h1 {
+  font-size: 16px;
+  font-family: Arial;
+}
+ 
+
+/* Skapar navigation bar. */
+.body {
+  margin: 0;
+}
+/*Först behöver jag skapa en lista för samtliga navigationer, och som blir som länkar.*/
+/* .navbar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+  height: 100%;
+  margin-right: 20px;
+  max-width: 200px;
+} */
+
+.navbar {
+  max-width: 200px;
+  margin-right: 20px;
+}
+
+/* .li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+} */
+/* Active är det som gör att vi ser var vi är genom att mörka den. */
+/* .li a.active {
+  background-color: #4CAF50;
+  color: white;
+} */
+/*Hover för den länk som inte är aktiv*/
+/* li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+} */
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+}
+
+li a {
+  /* display: block;
+  color: #000;
+  padding: 8px 16px; */
+  text-decoration: none;
+  background-color: lightskyblue;
+  border: none;
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  /* margin: 4px 0; */
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Change the link color on hover */
+li a:hover {
+  background-color: rgb(92, 19, 126);
+  color: white;
+}
+
+
+
+
+.paragraf {
+  font-family: Arial;
+
+}
+
+.tabcontent {
+  display: none;
+  flex-direction: column-reverse;
+}
+
+
+#myDiv10,
+#myDiv11,
+#myDiv13,
+#myDiv2,
+#myDiv3,
+#myDiv4,
+#myDiv5,
+#myDiv6,
+#myDiv7 {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+
+.container {
+  display: flex;
+  max-width: 1440px;
+  margin: 0 auto;
+  /* background-color: darkslategrey; */
+}
+
+.content {
+  width: 100%;
+  max-width: 1220px;
+  position: relative;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+}
+
+.home:after {
+  position: absolute;
+  top: 70%;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  content: 'Beslutsunderlag för placering av ny vårdcentral i Sverige';
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: lightskyblue;
+}
