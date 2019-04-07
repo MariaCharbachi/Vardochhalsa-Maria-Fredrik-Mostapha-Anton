@@ -28,18 +28,16 @@
    var chart = am4core.create("chartdiv", am4maps.MapChart);
    
    chart.titles.create().text = title;
- 
-   //sql_data = alasql("SELECT value_amount from healthcare where geo_cat = 'orebro' and nr_rapp = 1 and sex = 'Totalt' and period = 2017");
-   
-
 
    // Set map definition
    chart.geodataSource.url = "https://www.amcharts.com/lib/4/geodata/json/" + currentMap + ".json";
    chart.geodataSource.events.on("parseended", function(ev) {
-     var data = [];
      
+     var data = [];
+     //Hämtar värden för vilken område som skall visas
      var input = document.getElementById("name").value;
 
+     //Går igenom alla landskap och hämtar datan för rätt position
      for(var i = 0; i < ev.target.data.features.length; i++) {
        data_replace = ev.target.data.features[i].properties.name;
 
@@ -47,13 +45,15 @@
        data_replace = data_replace.replace(/å/gi,'a');
        data_replace = data_replace.replace(/ö/gi,'o');
 
-       data_map = alasql("SELECT value_amount from healthcare where geo_cat = '" + data_replace + "' and nr_rapp = 1 and sex = 'Totalt' and year = 2016");
+       //Hämtar värde för standard kartan. Endast ett värde kan visas per landskap
+       data_map = alasql("SELECT value_amount from healthcare where geo_cat = '" + data_replace + "' and nr_rapp = 1 and sex = 'Totalt' and year = 2017");
        
        data.push({
          id: ev.target.data.features[i].id,
          value: data_map[0]["value_amount"]
        })
      }
+     //polygonSeries innehåller punktpositioner för varje landskap kopplat till ett id för de område som sedan används för att rita kartan med de insatta datat.
      polygonSeries.data = data;
    })
 
@@ -108,23 +108,30 @@
    var hs = polygonTemplate.states.create("hover");
    hs.properties.fill = chart.colors.getIndex(0).brighten(-0.8);
 
+
+   //Skapar en funkton som trigger vid click på kartan
    var polygonTemplate = polygonSeries.mapPolygons.template;
    polygonTemplate.events.on("hit", function(ev) {
      // zoom to an object
      ev.target.series.chart.zoomToMapObject(ev.target);
      ev.target.series.chart.colors.getIndex(10).brighten(0);
-    
+
+     //Ändra värdet på vilket område som visas baserat på vilken landskap som har klickats
      document.getElementById("name").value = ev.target.dataItem.dataContext.name;
-     displayDate();
+     
+     //Kör funktion som ändra bargraphen till det ny området
+     displayData();
 
      data = [];
-     
+     //Hämtar värden för vilken rapport som skall visas
      var input_rapp =  document.getElementById("mySelect").value;
 
+     //Kartan kan ej visa upp flera värden för samma område, så därav ändra "alla rapporter" till standardvärde "rapport nr 1"
      if (input_rapp == 0) {
           input_rapp = 1
      }
      
+     //Går igenom alla landskap och hämtar datan för rätt position
      for(var i = 0; i < sweden.features.length; i++) {
           data_replace = sweden.features[i].properties.name;
 
@@ -132,6 +139,7 @@
           data_replace = data_replace.replace(/å/gi,'a');
           data_replace = data_replace.replace(/ö/gi,'o');
 
+          //Query:ar data baserat på använders parametrar
           data_map = alasql("SELECT value_amount from healthcare where geo_cat = '" + data_replace + "' and nr_rapp = " + input_rapp + " and sex = '" + document.getElementById("mySex").value + "' and year >= " + document.getElementById("year_min").value + " and year <= " + document.getElementById("year_max").value);
 
           data.push({
@@ -140,11 +148,8 @@
           })
      }
       
-
+     //Ersätter det gamla data med den nya query:ade
      ev.target.series.data = data;
-     // get object info
-     //console.log(ev.target.dataItem.dataContext.value);
-     
     });
  };
 

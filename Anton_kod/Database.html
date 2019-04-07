@@ -9,10 +9,10 @@
          <script type = "text/javascript" src="convert_healthcare.json"></script>
          <script type = "text/javascript" src="convert_diagnos.json"></script>
          <script type = "text/javascript" src="geodata/json/swedenLow-Code.json"></script>
-         <script src="https://www.amcharts.com/lib/4/core.js"></script>
-         
-         
-         <script src="jquery-3.3.1.js"></script>
+         <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+         <!--  Importering av filer som krävs för att kart-grafen-->
+
          <script src="amcharts4/core.js"></script>
          <script src="amcharts4/charts.js"></script>
          <script src="amcharts4/themes/animated.js"></script>
@@ -21,11 +21,8 @@
          <script src="geodata/swedenLow.js"></script>
          <script src="amcharts4/maps.js"></script>
 
-
-           
     </head>
     <body>
-
 
   <!--Knapp för dynamiska grafer, länk till ny sida. Kommer inte att användas.-->
   <script>
@@ -58,6 +55,7 @@
    <div class="container">
      <div class="navbar">
        <ul class="bar">
+
          <!-- Här ska en home-button läggas in. -->
          <li><a onclick="openCity(event, 'home1')">Home</a></li>
          <li><a onclick="openCity(event, 'myDiv1')">Skatt</a></li>
@@ -70,13 +68,20 @@
        </ul>
      </div>
 
+     <!-- Map kartan -->
           <div id="chartdiv" class="graph"></div>
 
-          <div id="histogram_price" class="graph">
-               <button onclick="displayDate()">Query av datat</button>
+               <!-- Barchart -->
+          <div id="barchart" class="graph">
+
+               <button onclick="displayData()">Query av datat</button>
+
+               <!--Text input box-->
                <input type="text" id="year_min" name="year" required minlength="4" maxlength="8" size="10"> 
                <input type="text" id="year_max" name="year" required minlength="4" maxlength="8" size="10"> 
                <input type="text" id="name" name="name" required minlength="4" maxlength="15" size="10"> 
+
+               <!--  listbox -->
                <form>
                     <select id="mySelect">
                          <option value = 1>Hur mycket betalar vi for halso- och sjukvarden?</option>
@@ -90,6 +95,8 @@
                          <option value = 0>Alla frågor</option>
                     </select>
                </form>
+
+               <!--  listbox -->
                <form>
                     <select id="mySex">
                          <option value = "Totalt">Totalt</option>
@@ -97,8 +104,17 @@
                          <option value = "Kvinnor">Kvinna</option>
                     </select>
                </form>
+
+               <!--  listbox -->
+               <form>
+                    <select id="myGraph">
+                         <option value = "bar">Bar</option>
+                         <option value = "scatter">Scatter</option>
+                    </select>
+               </form>
           </div>
      
+          <!--  importering av javascript-filer samt sql -->
       <script src="dist/alasql.js"></script>
       <script src = "Database.js"></script>
       <script src = "Map.js"></script>
