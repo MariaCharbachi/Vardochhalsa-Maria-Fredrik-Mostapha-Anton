@@ -74,66 +74,40 @@ for (var i = 0; i < data_healthcare.length; i++) {
 
 // skriv data
 
-text_var = alasql("SELECT * FROM diagnos");
-text_list = [];
-review_var = [];
-for (var i = 0; i < text_var.length; i++)  {
-     text_list.push(text_var[i]["year"]);
-     review_var.push(text_var[i]["antal"]);
+data_var = alasql("SELECT * FROM healthcare where geo_cat = 'Stockholm'");
+x_var = [];
+y_var = [];
+for (var i = 0; i < data_var.length; i++)  {
+     x_var.push(data_var[i]["year"]);
+     y_var.push(data_var[i]["value_amount"]);
 }
 
 //Diagnos
 
 var data_histo_price = [{
-     x: text_list,
-     y: review_var,
-     mode: 'markers',
-     type: 'scatter',
+     x: x_var,
+     y: y_var,
+     type: 'bar',
 }];
 
 var layout_price = {
-     title: "Historigram Price",
-     xaxis: {title: "Price"},
-     yaxis: {title: "Count"},
+     title: "Value amount",
+     xaxis: {title: "Year"},
+     yaxis: {title: "Value"},
 }
 
 histo_price = document.getElementById('histogram_price');  
 Plotly.plot(histo_price, data_histo_price, layout_price);  
 
-//Healthcare
-text_var = alasql("SELECT * FROM healthcare");
-text_list = [];
-review_var = [];
-for (var i = 0; i < text_var.length; i++)  {
-  text_list.push(text_var[i]["year"]);
-  review_var.push(text_var[i]["value_amount"]);
-}
-
-var data_histo_guest = [{
-     x: text_list,
-     y: review_var,
-     mode: 'markers',
-     type: 'scatter',
-     }];
-  
-var layout_guest = {
-     title: "Historigram Price",
-     xaxis: {title: "Price"},
-     yaxis: {title: "Count"},
-}
-
-histo_guest = document.getElementById('histogram_guest');  
-Plotly.plot(histo_guest, data_histo_guest, layout_guest); 
-
 
 // Knapptryckning
 
 var x = document.getElementById("year_min");
-x.setAttribute("value", 2016);
+x.setAttribute("value", 2012);
 document.body.appendChild(x);
 
 var x = document.getElementById("year_max");
-x.setAttribute("value", 2017);
+x.setAttribute("value", 2018);
 document.body.appendChild(x);
 
 var x = document.getElementById("name");
@@ -153,28 +127,30 @@ function displayDate() {
      var input_sex = document.getElementById("mySex").value;
 
      if (input_rapp == 0 && input_name == "") {
-          text_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and sex = '" + input_sex + "'");
+          data_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and sex = '" + input_sex + "'");
      } else if (input_rapp == 0) {
-          text_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and geo_cat = '" + input_name + "'" + " and sex = '" + input_sex  + "'");
+          data_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and geo_cat = '" + input_name + "'" + " and sex = '" + input_sex  + "'");
      } else if (input_name == "") {
-          text_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and nr_rapp = " + input_rapp + " and sex = '" + input_sex  + "'");
+          data_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and nr_rapp = " + input_rapp + " and sex = '" + input_sex  + "'");
      } else {
-          text_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and geo_cat = '" + input_name + "' and nr_rapp = " + input_rapp + " and sex = '" + input_sex + "'");
+          data_var = alasql("SELECT * FROM healthcare WHERE year >= " + input_year_min + "and year <= " + input_year_max + " and geo_cat = '" + input_name + "' and nr_rapp = " + input_rapp + " and sex = '" + input_sex + "'");
      }
      
-
-     text_list = [];
-     review_var = [];
-     for (var i = 0; i < text_var.length; i++)  {
-          text_list.push(text_var[i]["year"]);
-          review_var.push(text_var[i]["value_amount"]);
+     x_var = [];
+     y_var = [];
+     for (var i = 0; i < data_var.length; i++)  {
+          x_var.push(data_var[i]["year"]);
+          y_var.push(data_var[i]["value_amount"]);
      }
-
+     
+     console.table(x_var);
+     console.table(y_var);
+     //Diagnos
+     
      var data_histo_price = [{
-     x: text_list,
-     y: review_var,
-     mode: 'markers+lines',
-     type: 'scatter',
+          x: x_var,
+          y: y_var,
+          type: 'bar',
      }];
 
      histo_price = document.getElementById('histogram_price');               

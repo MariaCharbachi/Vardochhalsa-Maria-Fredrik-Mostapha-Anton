@@ -4,7 +4,7 @@
         <meta charset="utf-8">	 
         <title>Javascript</title>	
          <!--länken till css filen-->
-         <link rel="stylesheet" type="text/css" href="grupparbete.css">
+         <link rel="stylesheet" type="text/css" href="design.css">
          <script src="plotly-latest.min.js"></script>
          <script type = "text/javascript" src="convert_healthcare.json"></script>
          <script type = "text/javascript" src="convert_diagnos.json"></script>
@@ -26,42 +26,79 @@
     </head>
     <body>
 
-      <div class="row">
-            <div id="histogram_price" class="column">
-            </div>
-            <div id="histogram_guest" class="column">
-            </div>
-      </div>
-      <div class="row">
-            <div id="chartdiv" class="column"></div>
-            <div id="scatter" class="column">
-                <button onclick="displayDate()">Query av datat</button>
-            <input type="text" id="year_min" name="year" required minlength="4" maxlength="8" size="10"> 
-            <input type="text" id="year_max" name="year" required minlength="4" maxlength="8" size="10"> 
-            <input type="text" id="name" name="name" required minlength="4" maxlength="15" size="10"> 
-                <form>
-                      <select id="mySelect">
-                          <option value = 1>Fråga1</option>
-                          <option value = 2>Fråga2</option>
-                          <option value = 4>Fråga4</option>
-                          <option value = 5>Fråga5</option>
-                          <option value = 16>Fråga16</option>
-                          <option value = 42>Fråga42</option>
-                          <option value = 47>Fråga47</option>
-                          <option value = 48>Fråga48</option>
-                          <option value = 0>Alla frågor</option>
-                      </select>
-                </form>
-                <form>
-                    <select id="mySex">
-                        <option value = "Totalt">Totalt</option>
-                        <option value = "Man">Man</option>
-                        <option value = "Kvinnor">Kvinna</option>
-                    </select>
-              </form>
-            </div>      
-      </div> 
 
+  <!--Knapp för dynamiska grafer, länk till ny sida. Kommer inte att användas.-->
+  <script>
+     function openCity(evt, cityName) {
+       // Declare all variables
+       var i, tabcontent, tablinks;
+ 
+       // Get all elements with class="tabcontent" and hide them
+       tabcontent = document.getElementsByClassName("tabcontent");
+       for (i = 0; i < tabcontent.length; i++) {
+         tabcontent[i].style.display = "none";
+       }
+ 
+       // Get all elements with class="tablinks" and remove the class "active"
+       tablinks = document.getElementsByClassName("tablinks");
+       for (i = 0; i < tablinks.length; i++) {
+         tablinks[i].className = tablinks[i].className.replace(" active", "");
+       }
+ 
+       // Show the current tab, and add an "active" class to the button that opened the tab
+       document.getElementById(cityName).style.display = "flex";
+       evt.currentTarget.className += " active";
+     }
+   </script>
+ 
+   <!--Lista för navigation-bar.-->
+   <p id="naven"></p>
+   <!--1. Skatt, 2. Andel 1-6, 8. Summering, 9. Sjukdomskategori för kampanj, 10. Resultat-->
+ 
+   <div class="container">
+     <div class="navbar">
+       <ul class="bar">
+         <!-- Här ska en home-button läggas in. -->
+         <li><a onclick="openCity(event, 'home1')">Home</a></li>
+         <li><a onclick="openCity(event, 'myDiv1')">Skatt</a></li>
+         <li><a onclick="openCity(event, 'andel')">Andel 1-6</a></li>
+         <li><a onclick="openCity(event, 'myDiv9')">Summering</a></li>
+         <li><a onclick="openCity(event, 'myDiv8')">Specialisering</a></li>
+         <li><a onclick="openCity(event, 'resultat')">Resultat</a></li>
+         <li><a href="Anton_kod/Database.html">Dynamiska grafer</a></li>
+ 
+       </ul>
+     </div>
+
+          <div id="chartdiv" class="graph"></div>
+
+          <div id="histogram_price" class="graph">
+               <button onclick="displayDate()">Query av datat</button>
+               <input type="text" id="year_min" name="year" required minlength="4" maxlength="8" size="10"> 
+               <input type="text" id="year_max" name="year" required minlength="4" maxlength="8" size="10"> 
+               <input type="text" id="name" name="name" required minlength="4" maxlength="15" size="10"> 
+               <form>
+                    <select id="mySelect">
+                         <option value = 1>Hur mycket betalar vi for halso- och sjukvarden?</option>
+                         <option value = 2>Andel i befolkningen som anser att de har tillgang till den halso- och sjukvard de behover</option>
+                         <option value = 4>Andel besvarade telefonsamtal i primarvarden</option>
+                         <option value = 5>Andel patienter som far lakarbesok inom 7 dagar i primarvard</option>
+                         <option value = 16>Andel patienter som upplevt sig delaktiga och involverade i sin vard vid besok vid primarvardsmottagningn</option>
+                         <option value = 42>Andel som uppgivit att deras allmanna halsotillstand ar bra eller mycket bra</option>
+                         <option value = 47>Andel i befolkningen som har stort eller mycket stort fortroende for halso- och sjukvarden i sin helhet i sitt landsting/sin region</option>
+                         <option value = 48>Andel i befolkningen som uppfattar att vard ges pa lika villkor</option>
+                         <option value = 0>Alla frågor</option>
+                    </select>
+               </form>
+               <form>
+                    <select id="mySex">
+                         <option value = "Totalt">Totalt</option>
+                         <option value = "Man">Man</option>
+                         <option value = "Kvinnor">Kvinna</option>
+                    </select>
+               </form>
+          </div>
+     
       <script src="dist/alasql.js"></script>
       <script src = "Database.js"></script>
       <script src = "Map.js"></script>
