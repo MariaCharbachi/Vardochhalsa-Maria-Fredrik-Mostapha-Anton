@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Vårdcentral</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="DiagnosTyp.js"></script>
+  <script src="convertcsv.js"></script>
+  <script src="lanskoder.js"></script>
+  <link rel="stylesheet" type="text/css" href="design.css">
+
+
+</head>
+
+<body>
+
+ 
+  <!--Knapp för dynamiska grafer, länk till ny sida. Kommer inte att användas.-->
+  <script>
+    function openCity(evt, cityName) {
+      // Declare all variables
+      var i, tabcontent, tablinks;
+
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(cityName).style.display = "flex";
+      evt.currentTarget.className += " active";
+    }
+  </script>
+
+  <!--Lista för navigation-bar.-->
+  <p id="naven"></p>
+  <!--1. Skatt, 2. Andel 1-6, 8. Summering, 9. Sjukdomskategori för kampanj, 10. Resultat-->
+
+  <div class="container">
+    <div class="navbar">
+      <ul class="bar">
+        <!-- Här ska en home-button läggas in. -->
+        <li><a onclick="openCity(event, 'home1')">Home</a></li>
+        <li><a onclick="openCity(event, 'myDiv1')">Skatt</a></li>
+        <li><a onclick="openCity(event, 'andel')">Andel 1-6</a></li>
+        <li><a onclick="openCity(event, 'myDiv9')">Summering</a></li>
+        <li><a onclick="openCity(event, 'myDiv8')">Specialisering</a></li>
+        <li><a onclick="openCity(event, 'resultat')">Resultat</a></li>
+        <li><a href="Anton_kod/Database.html">Dynamiska grafer</a></li>
+
+      </ul>
+    </div>
+
+    <!-- Lägg in en div för att styra home-button<div id=  -->
+
+
+    <div class="content">
+      <div id="home1" class="home tabcontent">
+        <img src="https://cdn.pixabay.com/photo/2018/04/12/04/26/blood-pressure-3312513_960_720.png">
+      </div>
+
+      <div id='myDiv1' class="tabcontent">
+        <h1>Landstingens strukturjusterade hälso- och sjukvårdskostnader per invånare. Primärvårdsansluten hemsjukvård,
+          tandvård och omstruktureringskostnader är exkluderade</h1>
+      </div>
+
+      <div id="andel" class="tabcontent">
+        <div id='myDiv2'>
+          <h1>Andel i befolkningen som anser att de har tillgång till den hälso- och sjukvård de behöver</h1>
+        </div>
+
+        <br><br><br><br><br><br><br><br><br><br>
+        
+
+        <div id='myDiv3'>
+          <h1>Andel besvarade telefonsamtal i primärvården, (enbart enheter med datoriserade telefonsystem)</h1>
+        </div>
+
+
+        <br><br><br><br><br><br><br><br><br><br>
+        
+
+        <div id='myDiv4'>
+          <h1>Andel patienter som får läkarbesök inom 7 dagar i primärvård</h1>
+        </div>
+
+        
+        <br><br><br><br><br><br><br><br><br><br>
+        
+
+        <div id='myDiv5'>
+          <h1>Andel patienter som upplevt sig delaktiga och involverade i sin vård vid besök vid primärvårdsmottagningn,
+            andelen baseras på en sammanvägning av flera enkätfrågor</h1>
+        </div>
+
+        
+        <br><br><br><br><br><br><br><br><br><br>
+        
+
+        <div id='myDiv6'>
+          <h1>Andel i befolkningen som har stort eller mycket stort förtroende för hälso- och sjukvården i sin helhet i
+            sitt landsting/sin region</h1>
+        </div>
+
+
+        <br><br><br><br><br><br><br><br><br><br>
+        
+        
+        <div id='myDiv7'>
+          <h1>Andel i befolkningen som uppfattar att vård ges på lika villkor</h1>
+        </div>
+
+      </div>
+
+      <div id='myDiv9' class="tabcontent">
+        <h1>Sammanlagd poäng utefter våra andelsfrågor</h1>
+      </div>
+
+      <div id="resultat" class="tabcontent">
+        <div id='myDiv11'>
+          <!-- <h1>Nöjda individer procentuell fördelning</h1> -->
+        </div>
+
+        <div id='myDiv13'>
+          <h1>Missnöjda individer per län</h1>
+        </div>
+
+        <br><br><br><br><br><br><br><br><br><br>
+
+        <div id='myDiv10'>
+          <h1>Missnöjda individer procentuell fördelning</h1>
+        </div>
+      </div>
+
+      <!-- Kampanj -->
+      <div id='myDiv8' class="tabcontent">
+        <h1>Befolkningens sjukdomstillstånd grupperat efter år och kategori</h1>
+      </div>
+    </div>
+
+  </div>
+  <script>
+
+
+    ////////////////För ATT VÄLJA DATATYP FÖR INDATAT. (för att den ska fungera så måste vi byta ut . mot ,)
+    // Denna funktion returnerar en lista  med inmatning Fråga, året vi vill visa, vilken kolumn vi vill se & vilken datatyp som datat ska få.
+    function testmetod(Dataset, Fråga, år, attribut, dataTyp) {
+      var lista = [];
+      for (i = 0; i < Dataset.length; i++) {
+        if (Dataset[i].name_long == Fråga && Dataset[i].period == år)
+          lista.push(dataTyp(Dataset[i][attribut]));
+      }
+      return lista;
+    }
+
+
+
+    var region = testmetod(Dataset, Dataset[0].name_long, "2017", "geo_cat", String);
+
+//Denna används för att filtrera fram X-axlar utan RIKET för vår sista plot.
+var regionUtanRiket = region
+regionUtanRiket.splice(regionUtanRiket.indexOf("RIKET"),1)
+
+
+    ///Data för frågorna 1,2,4,5,16,47,48.
+    var skattLista = testmetod(Dataset,
+      "Landstingens strukturjusterade hälso- och sjukvårdskostnader per invånare. Primärvårdsansluten hemsjukvård, tandvård och omstruktureringskostnader är exkluderade",
+      "2017", "value", Number)
+    var quest2 = testmetod(Dataset,
+      "Andel i befolkningen som anser att de har tillgång till den hälso- och sjukvård de behöver", "2017", "value",
+      Number)
+    var quest4 = testmetod(Dataset,
+      "Andel besvarade telefonsamtal i primärvården, (enbart enheter med datoriserade telefonsystem)", "2017 (våren)",
+      "value", Number)
+    var quest5 = testmetod(Dataset, "Andel patienter som får läkarbesök inom 7 dagar i primärvård", "2017 (våren)",
+      "value", Number)
+    var quest16 = testmetod(Dataset,
+      "Andel patienter som upplevt sig delaktiga och involverade i sin vård vid besök vid primärvårdsmottagningn, andelen baseras på en sammanvägning av flera enkätfrågor",
+      "2017", "value", Number)
+    var quest47 = testmetod(Dataset,
+      "Andel i befolkningen som har stort eller mycket stort förtroende för hälso- och sjukvården i sin helhet i sitt landsting/sin region",
+      "2017", "value", Number)
+    var quest48 = testmetod(Dataset, "Andel i befolkningen som uppfattar att vård ges på lika villkor", "2017", "value",
+      Number)
+
+
+
+
+   var populationPerRegion16 = [];
+
+    for (i = 0; i < lansKoder.length; i++) {
+      populationPerRegion16.push(Number(lansKoder[i]["befolkning 20161231"]))
+    }
+
+   var  antalMissnojdaPerRegion = [];
+
+
+    ////////////////////////////////////////////////////
+
+
+   var shareOfDisapointedPeopleByRegion = [];
+    for (i = 0; i < region.length; i++)
+      shareOfDisapointedPeopleByRegion.push((100 - ((quest2[i] + quest4[i] + quest5[i] + quest16[i] + quest47[i] +
+        quest48[i]) / 6)))
+
+    var shareOfSatisfiedPeopleByRegion = [];
+    for (i = 0; i < region.length; i++)
+      shareOfSatisfiedPeopleByRegion.push((quest2[i] + quest4[i] + quest5[i] + quest16[i] + quest47[i] + quest48[i]) /
+        6)
+
+    for (i = 0; i < lansKoder.length; i++) {
+      antalMissnojdaPerRegion.push(Number(lansKoder[i]["befolkning 20161231"]) * (shareOfDisapointedPeopleByRegion[i]) /
+        100)
+    }
+
+
+
+    //Returnerar en lista på värden specifikt för ValuesDiagnos
+    // tar 3 parametrar, vilket år vi vill filtrera, vilken kolumn och ett filter som hämtar enbart värden över 20 000.
+    function GetValuesDiagnos(år, key) {
+      var lista = [];
+      for (i = 0; i < dataSetDiagnosSV.length; i++) {
+        if (dataSetDiagnosSV[i].period == år && dataSetDiagnosSV[i].Totalt > 20000)
+          lista.push(dataSetDiagnosSV[i][key])
+      }
+      return lista;
+    }
+
+
+    // var DiagnosTyper = GetValuesDiagnos("2013", "DiagnosTyp");
+    var DiagValue13 = GetValuesDiagnos("2013", "Totalt");
+    var DiagValue14 = GetValuesDiagnos("2014", "Totalt");
+    var DiagValue15 = GetValuesDiagnos("2015", "Totalt");
+    var DiagValue16 = GetValuesDiagnos("2016", "Totalt");
+    var DiagValue17 = GetValuesDiagnos("2017", "Totalt");
+
+
+//Hårdkodat för att korta ner rukbrikerna på X-axeln.
+    var DiagnosTyper = ["Samtliga", "Tumörer", "Psykiska sjukdomar & beteendestörningar", "Sjukdomar i nervsystemet","Cirkulationsorganens sjukdomar","Sjukdomar i muskuloskeletala systemet & bindväv", "skador, förgiftningar etc.", "saknas/okänd" ]
+
+    var data1 = [{
+      x: region,
+      y: skattLista,
+      type: 'bar'
+      }];
+
+
+    /////////////////////////////// DETTA stycke är ramverket för Diagrammet som visar sjukdomar uppdelat.
+
+    var data13 = {
+      x: DiagnosTyper,
+      y: DiagValue13,
+      name: "2013",
+      type: 'bar'
+    };
+
+
+    var data14 = {
+      x: DiagnosTyper,
+      y: DiagValue14,
+      name: "2014",
+      type: 'bar'
+    };
+
+
+    var data15 = {
+      x: DiagnosTyper,
+      y: DiagValue15,
+      name: "2015",
+      type: 'bar'
+    };
+
+
+    var data16 = {
+      x: DiagnosTyper,
+      y: DiagValue16,
+      name: "2016",
+      type: 'bar'
+    };
+
+
+    var data17 = {
+      x: DiagnosTyper,
+      y: DiagValue17,
+      name: "2017",
+      type: 'bar'
+    };
+
+
+    var dataSet13_17 = [data13, data14, data15, data16, data17];
+    
+    
+    var layoutGroup = {
+      barmode: 'group',
+      xaxis: {
+        autorange: true,
+        type: 'number',
+        automargin: true,
+        tickangle: -20,
+      }
+    };
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Andelsfrågorna 1-6.
+    var data2 = [{
+      x: region,
+      y: quest2,
+      type: 'bar',
+      name: 'Fråga 1'
+    }];
+
+
+    var data3 = [{
+      x: region,
+      y: quest4,
+      type: 'bar',
+      name: 'Fråga 2'
+    }];
+
+
+    var data4 = [{
+      x: region,
+      y: quest5,
+      type: 'bar',
+      name: 'Fråga 3'
+    }];
+
+
+    var data5 = [{
+      x: region,
+      y: quest16,
+      type: 'bar',
+      name: 'Fråga 4'
+    }];
+
+
+    var data6 = [{
+      x: region,
+      y: quest47,
+      type: 'bar',
+      name: 'Fråga 5'
+    }];
+
+    var data7 = [{
+      x: region,
+      y: quest48,
+      type: 'bar',
+      name: 'Fråga 6'
+    }];
+
+    //resultatfrågorna.
+    var data8 = [{
+      x: region,
+      y: shareOfDisapointedPeopleByRegion,
+      type: 'bar'
+    }];
+
+
+
+    var data9 = [{
+      x: region,
+      y: shareOfSatisfiedPeopleByRegion,
+      type: 'bar',
+      xaxis:{ tickangle: -45}
+    }];
+
+    var dataSum = [data2[0], data3[0], data4[0], data5[0], data6[0], data7[0]];
+
+
+    var layoutStack = {
+      barmode: 'stack',
+      xaxis: {
+        autorange: true,
+        type: 'number',
+        automargin: true,
+        tickangle: -45
+      }
+    };
+
+
+
+    var data10 = [{
+      x: region,
+      y: populationPerRegion16,
+      type: 'bar'
+    }];
+
+    var data11 = [{
+      x: regionUtanRiket,
+      y: antalMissnojdaPerRegion,
+      type: 'bar'
+    }];
+
+
+
+
+    var layoutRange = {
+      yaxis: {
+        range: [0, 100],
+        type: 'number'
+      },
+      xaxis: {
+        autorange: true,
+        type: 'number',
+        automargin: true,
+        tickangle: -45
+      }
+    };
+
+
+
+    var layoutRange2 = {
+      xaxis: {
+        autorange: true,
+        type: 'number',
+        automargin: true,
+        tickangle: -45
+      }
+    };
+
+
+
+    Plotly.newPlot('myDiv1', data1, layoutRange2);
+    Plotly.newPlot('myDiv2', data2, layoutRange);
+    Plotly.newPlot('myDiv3', data3, layoutRange);
+    Plotly.newPlot('myDiv4', data4, layoutRange);
+    Plotly.newPlot('myDiv5', data5, layoutRange);
+    Plotly.newPlot('myDiv6', data6, layoutRange);
+    Plotly.newPlot('myDiv7', data7, layoutRange);
+    Plotly.newPlot('myDiv8', dataSet13_17, layoutGroup);
+    Plotly.newPlot('myDiv9', dataSum, layoutStack);
+    Plotly.newPlot('myDiv10', data8, layoutRange);
+    // Plotly.newPlot('myDiv11', data9, layoutRange);
+    Plotly.newPlot('myDiv13', data11, layoutRange2);
+  </script>
+
+
+
+
+</body>
+
+</html>
