@@ -49,7 +49,7 @@
   <div class="container">
     <div class="navbar">
       <ul class="bar">
-        <!-- Här ska en home-button läggas in. -->
+        
         <li><a onclick="openCity(event, 'home1')">Home</a></li>
         <li><a onclick="openCity(event, 'myDiv1')">Skatt</a></li>
         <li><a onclick="openCity(event, 'andel')">Andel 1-6</a></li>
@@ -61,8 +61,8 @@
       </ul>
     </div>
 
-    <!-- Lägg in en div för att styra home-button<div id=  -->
-
+    
+    <!--Navbaren styrs med hjälp av tabcontent, andel och resultat-klasserna.-->
 
     <div class="content">
       <div id="home1" class="home tabcontent">
@@ -154,10 +154,10 @@
 
     ////////////////För ATT VÄLJA DATATYP FÖR INDATAT. (för att den ska fungera så måste vi byta ut . mot ,)
     // Denna funktion returnerar en lista  med inmatning Fråga, året vi vill visa, vilken kolumn vi vill se & vilken datatyp som datat ska få.
-    function testmetod(Dataset, Fråga, år, attribut, dataTyp) {
+    function testmetod(Dataset, Fråga, år, attribut, Kön, dataTyp) {
       var lista = [];
       for (i = 0; i < Dataset.length; i++) {
-        if (Dataset[i].name_long == Fråga && Dataset[i].period == år)
+        if (Dataset[i].name_long == Fråga && Dataset[i].period == år && Dataset[i].Kön == "Totalt")
           lista.push(dataTyp(Dataset[i][attribut]));
       }
       return lista;
@@ -165,7 +165,7 @@
 
 
 
-    var region = testmetod(Dataset, Dataset[0].name_long, "2017", "geo_cat", String);
+    var region = testmetod(Dataset, Dataset[0].name_long, "2017", "geo_cat","Totalt", String);
 
 //Denna används för att filtrera fram X-axlar utan RIKET för vår sista plot.
 var regionUtanRiket = region
@@ -175,22 +175,22 @@ regionUtanRiket.splice(regionUtanRiket.indexOf("RIKET"),1)
     ///Data för frågorna 1,2,4,5,16,47,48.
     var skattLista = testmetod(Dataset,
       "Landstingens strukturjusterade hälso- och sjukvårdskostnader per invånare. Primärvårdsansluten hemsjukvård, tandvård och omstruktureringskostnader är exkluderade",
-      "2017", "value", Number)
+      "2017", "value","Totalt", Number)
     var quest2 = testmetod(Dataset,
-      "Andel i befolkningen som anser att de har tillgång till den hälso- och sjukvård de behöver", "2017", "value",
+      "Andel i befolkningen som anser att de har tillgång till den hälso- och sjukvård de behöver", "2017", "value","Totalt",
       Number)
     var quest4 = testmetod(Dataset,
       "Andel besvarade telefonsamtal i primärvården, (enbart enheter med datoriserade telefonsystem)", "2017 (våren)",
-      "value", Number)
+      "value","Totalt", Number)
     var quest5 = testmetod(Dataset, "Andel patienter som får läkarbesök inom 7 dagar i primärvård", "2017 (våren)",
-      "value", Number)
+      "value","Totalt", Number)
     var quest16 = testmetod(Dataset,
       "Andel patienter som upplevt sig delaktiga och involverade i sin vård vid besök vid primärvårdsmottagningn, andelen baseras på en sammanvägning av flera enkätfrågor",
-      "2017", "value", Number)
+      "2017", "value","Totalt", Number)
     var quest47 = testmetod(Dataset,
       "Andel i befolkningen som har stort eller mycket stort förtroende för hälso- och sjukvården i sin helhet i sitt landsting/sin region",
-      "2017", "value", Number)
-    var quest48 = testmetod(Dataset, "Andel i befolkningen som uppfattar att vård ges på lika villkor", "2017", "value",
+      "2017", "value","Totalt", Number)
+    var quest48 = testmetod(Dataset, "Andel i befolkningen som uppfattar att vård ges på lika villkor", "2017", "value","Totalt",
       Number)
 
 
