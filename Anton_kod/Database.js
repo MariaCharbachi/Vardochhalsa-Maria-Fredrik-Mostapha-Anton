@@ -22,6 +22,7 @@ for (var i = 0; i < data_diagnos.length; i++) {
      + data_diagnos[i].andel_man + "')");
 }
 
+
 // Inläsning till sql från data_healthcare
 for (var i = 0; i < data_healthcare.length; i++) {
      if ([1,2,4,5,16,42,47,48].includes(data_healthcare[i].nr_rapp)) {
@@ -31,7 +32,7 @@ for (var i = 0; i < data_healthcare.length; i++) {
           + data_healthcare[i].geo_cat + "','"
           + data_healthcare[i].type + "',"
           + data_healthcare[i].value + ",'"
-          + Number(data_healthcare[i].period) + "','"
+          + Number(data_healthcare[i].period.slice(0,4)) + "','"
           + data_healthcare[i].sex_all + "')");
      }
 }     
