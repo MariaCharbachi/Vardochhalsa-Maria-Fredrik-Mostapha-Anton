@@ -39,7 +39,7 @@ for (var i = 0; i < data_healthcare.length; i++) {
 
 // Hämtar data en standard query för att kunna visa upp i graphen då sidan startar första gången
 
-data_var = alasql("SELECT * FROM healthcare where geo_cat = 'Stockholm'");
+data_var = alasql("SELECT * FROM healthcare where geo_cat = 'Stockholm' and nr_rapp = 1 and sex = 'Totalt'");
 x_var = [];
 y_var = [];
 for (var i = 0; i < data_var.length; i++)  {
